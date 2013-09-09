@@ -12,12 +12,12 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta charset="utf-8">
-<title>Project Info Green Apple </title>
+<title>Green Apple</title>
 <link rel="icon" type="image/png" href="../res/logo_sim.png">
 	
 <link rel="stylesheet" href="${rootPath}/css/base.css">	
-<link rel="stylesheet" href="/greenApple/css/signup_1.css" type="text/css" />
-<link rel="stylesheet" href="/greenApple/css/signup_2.css" type="text/css" />
+<link rel="stylesheet" href="${rootPath}/css/signup_1.css" type="text/css" />
+<link rel="stylesheet" href="${rootPath}/css/signup_2.css" type="text/css" />
 
 </head>
 
@@ -53,7 +53,7 @@
 	System.out.println(memberList.size());
 			for(Map map : memberList) { %>
 				<%=((Member)map.get("projectMember")).getName() %>
-				<%=(Integer)map.get("level") == 1 ? "★" : "" %>
+				<%=(Integer)map.get("level") == 0 ? "★" : "" %>
 				<br>
 <%			}
 		} else {%>	

@@ -12,6 +12,7 @@ public class Project implements Serializable {
 	protected Date 		startDate;
 	protected Date 		endDate;
 	protected String		tag;
+	protected String 	leader;
 	
 	public int getNo() {
 		return no;
@@ -55,6 +56,14 @@ public class Project implements Serializable {
 		this.tag = tag;
 		return this;
 	}
+	public String getLeader() {
+		return leader;
+	}
+	public Project setLeader(String leader) {
+		this.leader = leader;
+		return this;
+	}
+	
 	public Project clone() {
 		Project obj = new Project();
 		obj.no = this.no;
@@ -63,6 +72,7 @@ public class Project implements Serializable {
 		obj.startDate = this.startDate;
 		obj.endDate = this.endDate;
 		obj.tag = this.tag;
+		obj.leader = this.leader;
 		
 		return obj;
 	}

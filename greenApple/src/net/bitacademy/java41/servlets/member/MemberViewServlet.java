@@ -1,4 +1,4 @@
-package net.bitacademy.java41.servlets;
+package net.bitacademy.java41.servlets.member;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,23 +19,21 @@ import net.bitacademy.java41.vo.Member;
 import net.bitacademy.java41.vo.Project;
 import net.bitacademy.java41.vo.ProjectEx;
 
-@WebServlet("/project/detail")
+@WebServlet("/member/view")
 @SuppressWarnings("serial")
-public class ProjectDetailServlet extends HttpServlet {
+public class MemberViewServlet extends HttpServlet {
 	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 
 		ProjectDao projectDao = (ProjectDao) this.getServletContext().getAttribute("projectDao");
 		MemberDao memberDao = (MemberDao) this.getServletContext().getAttribute("memberDao");
 		try {
-			request.setCharacterEncoding("UTF-8");
-			HttpSession session = request.getSession();
-			ProjectEx project = projectDao.getProjectDetail( Integer.parseInt(request.getParameter("no")) );
-			List<Map> memberList = memberDao.getPrjtMbrList( Integer.parseInt(request.getParameter("no")) );
-			session.setAttribute("project", project);
-			session.setAttribute("memberList", memberList);
-			RequestDispatcher rd = request.getRequestDispatcher("/project/ProjectDetail.jsp");
+			String email = request.getParameter("email");
+			Member memberInfo = memberDao.getMember(email);
+			List<ProjectEx> projectList = projectDao.getProjectList( memberInfo.getEmail() );
+			request.setAttribute("memberInfo", memberInfo);
+			request.setAttribute("projectList", projectList);
+			RequestDispatcher rd = request.getRequestDispatcher("/member/MemberView.jsp");
 			rd.forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();

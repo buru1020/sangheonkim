@@ -12,12 +12,12 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta charset="utf-8">
-<title>Project List Green Apple</title>
+<title>Green Apple</title>
 <link rel="icon" type="image/png" href="../res/logo_sim.png">
 	
 <link rel="stylesheet" href="${rootPath}/css/base.css">	
-<link rel="stylesheet" href="/greenApple/css/signup_1.css" type="text/css" />
-<link rel="stylesheet" href="/greenApple/css/signup_2.css" type="text/css" />
+<link rel="stylesheet" href="${rootPath}/css/signup_1.css" type="text/css" />
+<link rel="stylesheet" href="${rootPath}/css/signup_2.css" type="text/css" />
 
 
 </head>
@@ -59,6 +59,8 @@
 			
 <% 	} %>		</tbody>
 			</table>
+			
+			<p><a href="${rootPath}/project/add">[신규 프로젝트]</a></p>
 		</div>
 	</section>
 	<!-- Section End -->

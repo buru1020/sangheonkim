@@ -19,6 +19,7 @@ public class MemberDao {
 		this.conPool = conPool;
 	}
 	
+	
 	public Member getMember(String email, String password) throws Exception {
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -33,6 +34,41 @@ public class MemberDao {
 					+ "		and PWD=?");
 			stmt.setString(1, email);
 			stmt.setString(2, password);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				Member member = new Member()
+											.setEmail(rs.getString("EMAIL"))
+											.setName(rs.getString("MNAME"))
+											.setTel(rs.getString("TEL"))
+											.setLevel(rs.getInt("LEVEL"));
+				return member;
+				
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			try {rs.close();} catch (Exception e) {}
+			try {stmt.close();} catch (Exception e) {}
+			if (con != null) {
+				conPool.returnConnection(con);
+			}
+		}
+	}
+	
+	public Member getMember(String email) throws Exception {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = conPool.getConnection();
+			stmt = con.prepareStatement(
+					" select EMAIL, MNAME, PWD, TEL, BLOG, REG_DATE, UPDATE_DATE, ANO, DET_ADDR, TAG, LEVEL"
+					+ " from SPMS_MEMBS"
+					+ " where EMAIL=?");
+			stmt.setString(1, email);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
 				Member member = new Member()
@@ -123,6 +159,45 @@ public class MemberDao {
 				map.put("level", rs.getInt("LEVEL"));
 				map.put("projectMember", projectMember);
 				list.add(map);
+			}
+			return list;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			try {rs.close();} catch (Exception e) {}
+			try {stmt.close();} catch (Exception e) {}
+			if (con != null) {
+				conPool.returnConnection(con);
+			}
+		}
+	}
+
+	public List<Member> getMemberList() throws Exception {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = conPool.getConnection();
+			String sql = 
+					"select EMAIL, MNAME, TEL, BLOG, ANO, DET_ADDR, TAG, LEVEL"
+					+" from SPMS_MEMBS"
+					+" order by MNAME";
+			System.out.println("[getPrjtMerList] SQL: \n" + sql);
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			List<Member> list = new ArrayList<Member>();
+			while (rs.next()) {
+				list.add( new Member()
+									.setEmail(rs.getString("EMAIL"))
+									.setName(rs.getString("MNAME"))
+									.setTel(rs.getString("TEL"))
+									.setBlog(rs.getString("BLOG"))
+									.setAddressNo(rs.getInt("ANO"))
+									.setDetailAddress(rs.getString("DET_ADDR"))
+									.setTag(rs.getString("TAG"))
+									.setLevel(rs.getInt("LEVEL"))
+								);
 			}
 			return list;
 		} catch (Exception e) {

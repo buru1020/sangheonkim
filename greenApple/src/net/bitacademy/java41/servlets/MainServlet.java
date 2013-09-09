@@ -50,7 +50,7 @@ public class MainServlet extends HttpServlet {
 				RequestDispatcher rd = request.getRequestDispatcher("/MainForm.jsp");
 				rd.forward(request, response);
 			} else {
-				response.sendRedirect("/greenApple/auth/login");
+				response.sendRedirect("/auth/login");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

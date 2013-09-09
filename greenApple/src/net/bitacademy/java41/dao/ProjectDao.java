@@ -28,19 +28,30 @@ public class ProjectDao {
 		try {
 			con = conPool.getConnection();
 			String sql = 
-					" select a.PNO, a.TITLE, a.CONTENT, a.START_DATE, a.END_DATE, a.TAG, b.LEVEL, b.EMAIL, b.MNAME, b.TEL"  
-					+" from SPMS_PRJS a" 
-					+" , (" 
-					+" select a.PNO, a.LEVEL, a.EMAIL, b.MNAME, b.TEL" 
-					+" from SPMS_PRJMEMB a"
-					+" , SPMS_MEMBS b"
-					+" where a.EMAIL = b.EMAIL"
-					+" group by a.PNO"
-					+" ) b "
-					+" where 1=1" 
-					+" and a.PNO = b.PNO"
-					+" and b.EMAIL = ?"
-					+" order by PNO desc";
+					" select a.PNO, a.TITLE, a.CONTENT, a.START_DATE, a.END_DATE, a.TAG, b.LEVEL, c.EMAIL, c.MNAME, c.TEL" 
+					+" from SPMS_PRJS a"
+					+"     , ("
+					+"        select PNO, EMAIL, LEVEL"
+					+"         from SPMS_PRJMEMB" 
+					+"         where EMAIL = ?"
+					+"        ) b"
+					+"     , SPMS_MEMBS c"
+					+" where a.PNO = b.PNO  "
+					+"     and b.EMAIL = c.EMAIL"
+					+" order by a.PNO desc";
+//					" select a.PNO, a.TITLE, a.CONTENT, a.START_DATE, a.END_DATE, a.TAG, b.LEVEL, b.EMAIL, b.MNAME, b.TEL"  
+//					+" from SPMS_PRJS a" 
+//					+" , (" 
+//					+" select a.PNO, a.LEVEL, a.EMAIL, b.MNAME, b.TEL" 
+//					+" from SPMS_PRJMEMB a"
+//					+" , SPMS_MEMBS b"
+//					+" where a.EMAIL = b.EMAIL"
+//					+" group by a.PNO"
+//					+" ) b "
+//					+" where 1=1" 
+//					+" and a.PNO = b.PNO"
+//					+" and b.EMAIL = ?"
+//					+" order by PNO desc";
 			System.out.println("[listPorject(email)] SQL :: \n" + sql);
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, email);
@@ -85,19 +96,30 @@ public class ProjectDao {
 		try {
 			con = conPool.getConnection();
 			String sql = 
-					" select a.PNO, a.TITLE, a.CONTENT, a.START_DATE, a.END_DATE, a.TAG, b.LEVEL, b.EMAIL, b.MNAME, b.TEL"  
-					+" from SPMS_PRJS a "
-					+" left join ("
-					+" select a.PNO, a.LEVEL, a.EMAIL, b.MNAME, b.TEL"
-					+" from SPMS_PRJMEMB a"
-					+" , SPMS_MEMBS b"
-					+" where a.EMAIL = b.EMAIL"
-					+" group by a.PNO"
-					+" ) b "
-					+" on (a.PNO = b.PNO)"
-					+" where 1=1 "
-					+" order by PNO desc";
-			System.out.println("[listPorject(email)] SQL :: \n" + sql);
+					" select a.PNO, a.TITLE, a.CONTENT, a.START_DATE, a.END_DATE, a.TAG, a.LEVEL, a.EMAIL, b.MNAME, b.TEL"
+					+" from ("
+					+"         select a.PNO, a.TITLE, a.CONTENT, a.START_DATE, a.END_DATE, a.TAG, b.LEVEL, b.EMAIL"
+					+"         from SPMS_PRJS a left join SPMS_PRJMEMB b on (a.PNO = b.PNO)"
+					+"         where 1=1"
+					+"             and b.LEVEL = 0 or b.LEVEL is null"
+					+"        ) a , SPMS_MEMBS b"
+					+" where 1=1"
+					+"     and a.EMAIL = b.EMAIL"
+					+ " order by a.PNO desc";
+//					" select a.PNO, a.TITLE, a.CONTENT, a.START_DATE, a.END_DATE, a.TAG, b.LEVEL, b.EMAIL, b.MNAME, b.TEL"  
+//					+" from SPMS_PRJS a "
+//					+" left join ("
+//					+" select a.PNO, a.LEVEL, a.EMAIL, b.MNAME, b.TEL"
+//					+" from SPMS_PRJMEMB a"
+//					+" , SPMS_MEMBS b"
+//					+" where a.EMAIL = b.EMAIL"
+//					+ " and a.LEVEL = 0"
+//					+" group by a.PNO"
+//					+" ) b "
+//					+" on (a.PNO = b.PNO)"
+//					+" where 1=1 "
+//					+" order by PNO desc";
+			System.out.println("[listPorject] SQL :: \n" + sql);
 			stmt = con.prepareStatement(sql);
 			rs = stmt.executeQuery();
 			
@@ -180,6 +202,53 @@ public class ProjectDao {
 		} finally {
 			try {rs.close();} catch (Exception e) {}
 			try {stmt.close();} catch (Exception e) {}
+			if (con != null) {
+				conPool.returnConnection(con);
+			}
+		}
+	}
+	
+	public int add(Project project) throws Exception {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		try {
+			con = conPool.getConnection();
+			
+			stmt = con.prepareStatement(
+				"insert into SPMS_PRJS("
+				+ " TITLE,CONTENT,START_DATE,END_DATE,TAG)"
+				+ " values(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			stmt.setString(1, project.getTitle());
+			stmt.setString(2, project.getContent());
+			stmt.setDate(3, project.getStartDate());
+			stmt.setDate(4, project.getEndDate());
+			stmt.setString(5, project.getTag());
+			stmt.executeUpdate();
+			
+			ResultSet rs = stmt.getGeneratedKeys();
+			if (rs.next()) {
+				project.setNo( rs.getInt(1) );
+			}
+			rs.close();
+			stmt.close();
+			
+			
+			stmt = con.prepareStatement(
+					"insert into SPMS_PRJMEMB("
+					+ " EMAIL,PNO,LEVEL)"
+					+ " values(?,?,0)");
+			stmt.setString(1, project.getLeader());
+			stmt.setInt(2, project.getNo());
+			stmt.executeUpdate();
+			
+			return project.getNo();
+			
+		} catch (Exception e) {
+			throw e;
+			
+		} finally {
+			try {stmt.close();} catch(Exception e) {}
 			if (con != null) {
 				conPool.returnConnection(con);
 			}

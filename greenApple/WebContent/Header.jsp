@@ -4,7 +4,7 @@
 <script type="text/javascript">
 function clickProject(no) {
 	var prams = "?no=" + no;
-	location.href="/greenApple/project/detail" + prams;
+	location.href="${rootPath}/project/view" + prams;
 }
 </script>
 
@@ -14,7 +14,7 @@ function clickProject(no) {
 		<div class="aui-header-inner">
 			<div class="aui-header-primary">
 				<h1 class="aui-header-logo aui-header-logo-bitbucket logged-out">
-					<a href="/greenApple/main" class="aui-nav-imagelink" id="logo-link"> <span
+					<a href="${rootPath}/main" class="aui-nav-imagelink" id="logo-link"> <span
 						class="aui-header-logo-device">Green Apple</span>
 					</a>
 				</h1>
@@ -25,7 +25,7 @@ function clickProject(no) {
 			</div>
 			<div class="aui-header-secondary">
 				<ul role="menu" class="aui-nav">
-					<li id="user-options"><a href="/greenApple/auth/logout" class="aui-nav-link login-link">Log out</a></li>
+					<li id="user-options"><a href="${rootPath}/auth/logout" class="aui-nav-link login-link">Log out</a></li>
 				</ul>
 			</div>
 		</div>

@@ -31,7 +31,7 @@ if (cookies != null) {
   <div id="wrapper">
     <div id="content" role="main">
 	  <div class="login-box workflow-box small">
-	  	<img alt="logo" src="../res/greenApple-2.png" id="log_img" >
+	  	<img alt="logo" src="${rootPath}/res/greenApple-2.png" id="log_img" >
 	  </div>
     
 	  <div id="login" class="login-box workflow-box small" data-method="standard">
@@ -58,7 +58,7 @@ if (cookies != null) {
 			        </span>
 			      </div>
 					<div class="sign-up">
-			          <a href="/greenApple/member/signUp">Need an account? Sign up free.</a>
+			          <a href="${rootPath}/member/signUp">Need an account? Sign up free.</a>
 			        </div>
 			    </div>
 			  </form>

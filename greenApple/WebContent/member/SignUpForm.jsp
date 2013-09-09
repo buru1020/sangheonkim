@@ -71,7 +71,7 @@ function signUp() {
 					<div class="aui-header-inner">
 						<div class="aui-header-primary">
 							<h1 class="aui-header-logo aui-header-logo-bitbucket logged-out">
-								<a href="/greenApple/auth/login" class="aui-nav-imagelink" id="logo-link"> <span
+								<a href="${rootPath}/auth/login" class="aui-nav-imagelink" id="logo-link"> <span
 									class="aui-header-logo-device">Green Apple</span>
 								</a>
 							</h1>
@@ -82,7 +82,7 @@ function signUp() {
 						</div>
 						<div class="aui-header-secondary">
 							<ul role="menu" class="aui-nav">
-								<li id="user-options"><a href="/greenApple/auth/login" class="aui-nav-link login-link">Log in</a></li>
+								<li id="user-options"><a href="${rootPath}/auth/login" class="aui-nav-link login-link">Log in</a></li>
 							</ul>
 
 						</div>

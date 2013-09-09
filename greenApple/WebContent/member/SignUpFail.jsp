@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Refresh" content="1;url=signUp">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>회원가입 성공</title>
+<title>Green Apple</title>
 </head>
 <body>
 
