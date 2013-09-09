@@ -32,7 +32,8 @@ CREATE TABLE `SPMS_MEMBS` (
 	`UPDATE_DATE` DATETIME     NULL     COMMENT '변경일', -- 변경일
 	`ANO`         INTEGER      NULL     COMMENT '주소번호', -- 주소번호
 	`DET_ADDR`    VARCHAR(255) NULL     COMMENT '상세주소', -- 상세주소
-	`TAG`         VARCHAR(255) NULL     COMMENT '태그' -- 태그
+	`TAG`         VARCHAR(255) NULL     COMMENT '태그', -- 태그
+	`LEVEL`       INTEGER	   NOT NULL DEFAULT 1 COMMENT '레빌' -- 레벨
 )
 COMMENT '멤버';
 
@@ -334,11 +335,13 @@ ALTER TABLE `SPMS_FEEDFILE`
 
 -- SPMS_MEMBS TEST data
 insert into SPMS_MEMBS(EMAIL,MNAME,PWD,TEL)
-values('m01@test.com','m01','1111','m01');
+values('m01@test.com','m01','1111','010-111-1111');
 insert into SPMS_MEMBS(EMAIL,MNAME,PWD,TEL)
-values('m02@test.com','m02','1111','m02');
+values('m02@test.com','m02','1111','010-222-2222');
 insert into SPMS_MEMBS(EMAIL,MNAME,PWD,TEL)
-values('m03@test.com','m03','1111','m03');		
+values('m03@test.com','m03','1111','010-333-3333');		
+insert into SPMS_MEMBS(EMAIL,MNAME,PWD,TEL, LEVEL)
+values('admin01@test.com','관리자01','1111','010-000-0000', 1);
 insert into SPMS_MEMBS(EMAIL,MNAME,PWD,TEL)
 values('park@test.com','박유진','1111','010-1111-111');
 insert into SPMS_MEMBS(EMAIL,MNAME,PWD,TEL)
@@ -353,6 +356,16 @@ insert into SPMS_MEMBS(EMAIL,MNAME,PWD,TEL)
 values('test3@test.com','오다환','1111','010-666-6666');		
 
 -- SPMS_PRJS TEST data
+insert into spms_prjs(title,content,start_date,end_date)
+values('project1', 'project1', '2013-1-1', '2013-2-2');
+insert into spms_prjs(title,content,start_date,end_date)
+values('project2', 'project2', '2013-2-2', '2013-3-2');
+insert into spms_prjs(title,content,start_date,end_date)
+values('project3', 'project3', '2013-3-1', '2013-4-2');
+insert into spms_prjs(title,content,start_date,end_date)
+values('project4', 'project4', '2013-4-1', '2013-5-2');
+insert into spms_prjs(title,content,start_date,end_date)
+values('project5', 'project5', '2013-5-1', '2013-6-2');
 insert into spms_prjs (TITLE, CONTENT, START_DATE, END_DATE, TAG ) 
 values ( '프로젝트 1', '프로젝트1 임시 테스트 데이터 프로젝트 content\n임시 테스트 데이터 프로젝트 content\n임시 테스트 데이터 프로젝트 content', now(), '2013-12-13' , 'aaa, bbb' );
 insert into spms_prjs (TITLE, CONTENT, START_DATE, END_DATE, TAG ) 
@@ -368,23 +381,36 @@ values ( '프로젝트 6', '프로젝트6 임시 테스트 데이터 프로젝�
 
 -- SPMS_PRJMEMB TEST data
 -- 0: PM(강사), 1:PL(팀장), 2:팀원
-
+insert into SPMS_PRJMEMB(EMAIL, PNO, LEVEL)
+values('m01@test.com', 1, 1);
+insert into SPMS_PRJMEMB(EMAIL, PNO, LEVEL)
+values('m01@test.com', 2, 0);
+insert into SPMS_PRJMEMB(EMAIL, PNO, LEVEL)
+values('m01@test.com', 3, 1);
+insert into SPMS_PRJMEMB(EMAIL, PNO, LEVEL)
+values ( 'm02@test.com', 2, 1 );
+insert into SPMS_PRJMEMB(EMAIL, PNO, LEVEL)
+values ( 'm02@test.com', 3, 0 );
+insert into SPMS_PRJMEMB(EMAIL, PNO, LEVEL)
+values ( 'm02@test.com', 4, 0 );
+insert into SPMS_PRJMEMB(EMAIL, PNO, LEVEL)
+values ( 'm02@test.com', 5, 1 );
 insert into spms_prjmemb (EMAIL, PNO, LEVEL) 
-values ( 'park@test.com', 1, 1 );
+values ( 'park@test.com', 6, 1 );
 insert into spms_prjmemb (EMAIL, PNO, LEVEL) 
-values ( 'kim@test.com', 1, 2 );
+values ( 'kim@test.com', 6, 2 );
 insert into spms_prjmemb (EMAIL, PNO, LEVEL) 
-values ( 'lee@test.com', 1, 2 );
+values ( 'lee@test.com', 6, 2 );
 insert into spms_prjmemb (EMAIL, PNO, LEVEL) 
-values ( 'park@test.com', 2, 1 );
+values ( 'park@test.com', 7, 1 );
 insert into spms_prjmemb (EMAIL, PNO, LEVEL) 
-values ( 'kim@test.com', 3, 1 );
+values ( 'kim@test.com', 7, 2 );
 insert into spms_prjmemb (EMAIL, PNO, LEVEL) 
-values ( 'test2@test.com', 3, 2 );
+values ( 'test2@test.com', 7, 2 );
 insert into spms_prjmemb (EMAIL, PNO, LEVEL) 
-values ( 'lee@test.com', 4, 1 );
+values ( 'lee@test.com', 8, 1 );
 insert into spms_prjmemb (EMAIL, PNO, LEVEL) 
-values ( 'test1@test.com', 4, 2 );
+values ( 'test1@test.com', 8, 2 );
 
 select * from spms_membs;
 select * from spms_prjs;

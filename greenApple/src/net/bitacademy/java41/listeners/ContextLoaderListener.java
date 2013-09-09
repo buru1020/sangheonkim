@@ -31,6 +31,7 @@ public class ContextLoaderListener implements ServletContextListener {
 		// - 웹 어플리케이션이 실행되는 동안 계속 유지할 수 있기 때문에
 		ctx.setAttribute("memberDao", memberDao);
 		ctx.setAttribute("projectDao", projectDao);
+		ctx.setAttribute("rootPath", ctx.getContextPath());
 	}
 	
 	// 웹 어플리케이션이 종료 될 때 호출됨.
