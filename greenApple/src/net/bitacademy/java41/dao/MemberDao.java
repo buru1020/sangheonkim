@@ -27,7 +27,7 @@ public class MemberDao {
 		try {
 			con = conPool.getConnection();
 			stmt = con.prepareStatement(
-					" select EMAIL, MNAME, PWD, TEL, BLOG, REG_DATE, UPDATE_DATE, ANO, DET_ADDR, TAG"
+					" select EMAIL, MNAME, PWD, TEL, BLOG, REG_DATE, UPDATE_DATE, ANO, DET_ADDR, TAG, LEVEL"
 					+ " from SPMS_MEMBS"
 					+ " where EMAIL=?"
 					+ "		and PWD=?");
@@ -38,7 +38,8 @@ public class MemberDao {
 				Member member = new Member()
 											.setEmail(rs.getString("EMAIL"))
 											.setName(rs.getString("MNAME"))
-											.setTel(rs.getString("TEL"));
+											.setTel(rs.getString("TEL"))
+											.setLevel(rs.getInt("LEVEL"));
 				return member;
 				
 			} else {
@@ -62,7 +63,7 @@ public class MemberDao {
 		try {
 			con = conPool.getConnection();
 			String sql = 
-					"insert into SPMS_MEMBS( EMAIL, MNAME, PWD, TEL, BLOG, REG_DATE, UPDATE_DATE, ANO, DET_ADDR, TAG )"
+					"insert into SPMS_MEMBS( EMAIL, MNAME, PWD, TEL, BLOG, REG_DATE, UPDATE_DATE, ANO, DET_ADDR, TAG, LEVEL )"
 							+ " values(?, ?, ?, ?, ?, now(), now(), NULL, NULL, NULL)";
 			System.out.println("[addMember] SQL ::\n" + sql);
 			stmt = con.prepareStatement(sql);
@@ -74,6 +75,7 @@ public class MemberDao {
 //			stmt.setInt(6, member.getAddressNo());
 //			stmt.setString(7, member.getDetailAddress());
 //			stmt.setString(8, member.getTag());
+//			stmt.setInt(9, member.getLevel());
 			return stmt.executeUpdate();
 			
 		} catch (Exception e) {
@@ -95,7 +97,7 @@ public class MemberDao {
 		try {
 			con = conPool.getConnection();
 			String sql = 
-					"select a.PNO, a.LEVEL, a.EMAIL, b.MNAME, b.TEL, b.BLOG, b.ANO, b.DET_ADDR, b.TAG"
+					"select a.PNO, a.LEVEL, a.EMAIL, b.MNAME, b.TEL, b.BLOG, b.ANO, b.DET_ADDR, b.TAG, b.LEVEL"
 					+" from SPMS_PRJMEMB a"
 					+" , SPMS_MEMBS b"
 					+" where a.EMAIL = b.EMAIL"
@@ -115,7 +117,8 @@ public class MemberDao {
 											.setBlog(rs.getString("BLOG"))
 											.setAddressNo(rs.getInt("ANO"))
 											.setDetailAddress(rs.getString("DET_ADDR"))
-											.setTag(rs.getString("TAG"));
+											.setTag(rs.getString("TAG"))
+											.setLevel(rs.getInt("LEVEL"));
 				map.put("no", rs.getInt("PNO"));
 				map.put("level", rs.getInt("LEVEL"));
 				map.put("projectMember", projectMember);
