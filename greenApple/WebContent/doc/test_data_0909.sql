@@ -31,7 +31,7 @@ CREATE TABLE `SPMS_MEMBS` (
 	`ANO`         INTEGER      NULL     COMMENT '주소번호', -- 주소번호
 	`DET_ADDR`    VARCHAR(255) NULL     COMMENT '상세주소', -- 상세주소
 	`TAG`         VARCHAR(255) NULL     COMMENT '태그', -- 태그
-	`LEVEL`       INTEGER NOT NULL DEFAULT 0 COMMENT '레벨' -- 레벨
+	`LEVEL`       INTEGER 	   NULL DEFAULT 0 COMMENT '레벨' -- 레벨
 )
 COMMENT '멤버';
 
