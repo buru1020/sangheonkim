@@ -59,8 +59,9 @@
 			
 <% 	} %>		</tbody>
 			</table>
-			
+			<c:if test="${!(member.level == 1)}">
 			<p><a href="${rootPath}/project/add">[신규 프로젝트]</a></p>
+			</c:if>
 		</div>
 	</section>
 	<!-- Section End -->
