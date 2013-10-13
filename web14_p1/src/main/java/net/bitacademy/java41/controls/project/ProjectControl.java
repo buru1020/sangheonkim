@@ -108,14 +108,27 @@ public class ProjectControl {
 				new Gson().toJson(jsonResult),
 				headers,
 				HttpStatus.OK);
-//		return "redirect:list.do";
 	}
 	
 	@RequestMapping("/view")
-	public String view(int no, Model model) throws Exception {
-		model.addAttribute("project", projectService.getProject(no));
+	public ResponseEntity<String> view(int no, Model model) throws Exception {
+		JsonResult jsonResult = new JsonResult();
+		try {
+			jsonResult.setData( projectService.getProject(no) );
+			jsonResult.setStatus("success");
+		} catch (Throwable e) {
+			StringWriter out = new StringWriter();
+			e.printStackTrace(new PrintWriter(out));
+			jsonResult.setData(out.toString());
+			jsonResult.setStatus("fail");
+		}
 		
-		return "project/view";
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Type", "text/plain;charset=UTF-8");
+		return new ResponseEntity<String>(
+				new Gson().toJson(jsonResult), 
+				headers, 
+				HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/update",method=RequestMethod.GET)

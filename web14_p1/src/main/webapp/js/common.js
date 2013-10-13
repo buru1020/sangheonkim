@@ -45,54 +45,103 @@ bitacademy.createRequest = function() {
 
 bitacademy.ajax = function(url, settings) {
 	var xhr = bitacademy.createRequest();
-	
-	xhr.onreadystatechange = function () {
-		if (xhr.readyState === 4) {
-			if (xhr.status === 200 || xhr.status === 201) {
-				dataType = "json";
-				if (settings.dataType) {
-					dataType = settings.dataType;
-				}
-				
-				var result = null;
-				if (dataType === "html") {
-					result = xhr.responseText;
-				} else if (dataType === "json") {
-					result = JSON.parse(xhr.responseText);
-				}
-				if (settings.success) {
-					settings.success(result);
-				}
-			} else {
-				if (settings.error) {
-					settings.error("서버요청 오류!");
-				}
-			}
-		}
-		
-		
-		
-	};
-	var type = "GET";
-	if (settings.type) {
-		type = settings.type;
+	var sync = true;
+	if (settings.sync != undefined) {
+		sync = settings.sync;
 	}
 	
-	xhr.open(type, url, true);
-	if (type == "GET") {
-		xhr.send();
-	} else {
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		var params = "";
-		if (settings.data) {
-			for( var name in settings.data) {
-				if (params != "") {
-					params += "&";
+	if (sync) { //비동기
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === 4) {
+				if (xhr.status === 200 || xhr.status === 201) {
+					dataType = "json";
+					if (settings.dataType) {
+						dataType = settings.dataType;
+					}
+					
+					var result = null;
+					if (dataType === "html") {
+						result = xhr.responseText;
+					} else if (dataType === "json") {
+						result = JSON.parse(xhr.responseText);
+					}
+					if (settings.success) {
+						settings.success(result);
+					}
+				} else {
+					if (settings.error) {
+						settings.error("서버요청 오류!");
+					}
 				}
-				params += name + "=" + settings.data[name];
+			}
+			
+			
+			
+		};
+		var type = "GET";
+		if (settings.type) {
+			type = settings.type;
+		}
+		
+		xhr.open(type, url, true);
+		if (type == "GET") {
+			xhr.send();
+		} else {
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			var params = "";
+			if (settings.data) {
+				for( var name in settings.data) {
+					if (params != "") {
+						params += "&";
+					}
+					params += name + "=" + settings.data[name];
+				}
+			}
+			xhr.send(params);
+		}
+	} else { //동기
+		var type = "GET";
+		if (settings.type) {
+			type = settings.type;
+		}
+		
+		xhr.open(type, url, false);
+		if (type == "GET") {
+			xhr.send();
+		} else {
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			var params = "";
+			if (settings.data) {
+				for( var name in settings.data) {
+					if (params != "") {
+						params += "&";
+					}
+					params += name + "=" + settings.data[name];
+				}
+			}
+			xhr.send(params);
+		}
+		
+		if (xhr.status === 200 || xhr.status === 201) {
+			dataType = "json";
+			if (settings.dataType) {
+				dataType = settings.dataType;
+			}
+			
+			var result = null;
+			if (dataType === "html") {
+				result = xhr.responseText;
+			} else if (dataType === "json") {
+				result = JSON.parse(xhr.responseText);
+			}
+			if (settings.success) {
+				settings.success(result);
+			}
+		} else {
+			if (settings.error) {
+				settings.error("서버요청 오류!");
 			}
 		}
-		xhr.send(params);
 	}
 };
 

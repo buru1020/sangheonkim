@@ -4,4 +4,9 @@ function projectjs_onload() {
 	document.body.addEventListener("newProject", function(event) {
 		$("#projectContent").load("project/projectAdd.html");
 	});
+	
+	document.body.addEventListener("projectView", function(event) {
+		console.log(event.projectNo);
+		$("#projectContent").load("project/projectView.html?projectNo=" + event.projectNo);
+	});
 }
